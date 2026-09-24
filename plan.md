@@ -152,15 +152,14 @@ Gaps for Next.js:
 | Step | What | Done? |
 |---|---|---|
 | 1 | Generate dataset | ✅ |
-| 2 | PySpark processing | ✅ |
-| 3 | SQLite + star schema | ✅ |
-| 4 | K-Means clustering | ✅ |
-| 5 | FastAPI endpoints | ✅ |
-| 6 | GPT simulation (+ fallback) | ✅ |
-| 7 | STRIDE write-up | ✅ |
-| 8 | CORS on FastAPI | ⬜ |
-| 9 | Next.js dashboard | ⬜ |
-| 10 | End-to-end demo + screenshots for report | ⬜ |
+| 2 | PySpark big-data analysis (`spark/` package → `data/processed/`) | ✅ |
+| 3 | SQLite + star schema (rebuild on Phase 2 outputs) | ⬜ scaffold only |
+| 4 | K-Means clustering (rebuild on product_features) | ⬜ scaffold only |
+| 5 | FastAPI endpoints (rebuild + CORS) | ⬜ scaffold only |
+| 6 | GPT simulation (+ fallback) | ⬜ scaffold only |
+| 7 | STRIDE write-up | ✅ draft |
+| 8 | Next.js dashboard | ⬜ |
+| 9 | End-to-end demo + screenshots for report | ⬜ |
 
 ---
 

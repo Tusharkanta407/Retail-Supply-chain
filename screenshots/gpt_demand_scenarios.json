@@ -1,0 +1,50 @@
+[
+  {
+    "scenario": "Normal",
+    "baseline_units": 509720,
+    "baseline_stock": 15476369,
+    "high_demand_products": 9,
+    "expected_units": 535206,
+    "risk": "low",
+    "recommendation": "Slight growth vs baseline; maintain current replenishment.",
+    "explanation": "Rule-based fallback (no OPENAI_API_KEY or GPT unavailable).",
+    "source": "fallback",
+    "baseline_from": "sqlite"
+  },
+  {
+    "scenario": "Festival",
+    "baseline_units": 509720,
+    "baseline_stock": 15476369,
+    "high_demand_products": 9,
+    "expected_units": 713608,
+    "risk": "medium",
+    "recommendation": "Spike in demand; pre-position stock for High-demand products.",
+    "explanation": "Rule-based fallback (no OPENAI_API_KEY or GPT unavailable).",
+    "source": "fallback",
+    "baseline_from": "sqlite"
+  },
+  {
+    "scenario": "Low demand",
+    "baseline_units": 509720,
+    "baseline_stock": 15476369,
+    "high_demand_products": 9,
+    "expected_units": 407776,
+    "risk": "low",
+    "recommendation": "Softer sales; reduce inbound to avoid overstock.",
+    "explanation": "Rule-based fallback (no OPENAI_API_KEY or GPT unavailable).",
+    "source": "fallback",
+    "baseline_from": "sqlite"
+  },
+  {
+    "scenario": "Supply disruption",
+    "baseline_units": 509720,
+    "baseline_stock": 15476369,
+    "high_demand_products": 9,
+    "expected_units": 433262,
+    "risk": "medium",
+    "recommendation": "Constrained availability; protect High-demand SKUs first.",
+    "explanation": "Rule-based fallback (no OPENAI_API_KEY or GPT unavailable).",
+    "source": "fallback",
+    "baseline_from": "sqlite"
+  }
+]

@@ -1,0 +1,36 @@
+{
+  "dq": [
+    {
+      "stage": "before_clean",
+      "total_rows": 60150,
+      "null_any_key_field": 200,
+      "null_sales_quantity": 200,
+      "null_stock_quantity": 0,
+      "negative_sales": 0,
+      "negative_stock": 100,
+      "duplicate_rows": 152
+    },
+    {
+      "stage": "after_clean",
+      "total_rows": 59698,
+      "rows_removed": 452,
+      "pct_removed": 0.75,
+      "null_any_key_field": 0,
+      "null_sales_quantity": 0,
+      "null_stock_quantity": 0,
+      "negative_sales": 0,
+      "negative_stock": 0,
+      "duplicate_rows": 0
+    }
+  ],
+  "kpis": {
+    "transactions": 59698,
+    "total_units": 509720,
+    "total_revenue": 26875277.09,
+    "products": 150,
+    "stores": 20,
+    "warehouses": 10,
+    "date_min": "2026-06-01",
+    "date_max": "2026-08-29"
+  }
+}
