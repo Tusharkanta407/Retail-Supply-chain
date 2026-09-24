@@ -1,4 +1,4 @@
-# explain.md — Full project walkthrough (start → end)
+# Full project walkthrough (start → end)
 
 This document explains **everything we built**, step by step, from generating the dataset to the final submission evidence.
 
