@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <rect width="100%" height="100%" fill="#0a0f1d"/>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#grid)" />
+  
+  <!-- Axes -->
+  <line x1="80" y1="420" x2="740" y2="420" stroke="#64748B" stroke-width="2"/>
+  <line x1="80" y1="60" x2="80" y2="420" stroke="#64748B" stroke-width="2"/>
+  
+  <!-- Labels -->
+  <text x="410" y="460" fill="#94A3B8" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" text-anchor="middle">Average Daily Sales</text>
+  <text x="35" y="240" fill="#94A3B8" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" transform="rotate(-90, 35, 240)" text-anchor="middle">Total Revenue ($)</text>
+  <text x="410" y="40" fill="#F1F5F9" font-family="'Outfit', sans-serif" font-size="18" font-weight="bold" text-anchor="middle">K-Means Demand Segmentation Clusters</text>
+
+  <!-- Low Demand Group (Green) -->
+  <circle cx="150" cy="380" r="6" fill="#10B981" opacity="0.8"/>
+  <circle cx="180" cy="360" r="5" fill="#10B981" opacity="0.8"/>
+  <circle cx="210" cy="390" r="7" fill="#10B981" opacity="0.8"/>
+  <circle cx="130" cy="340" r="5" fill="#10B981" opacity="0.8"/>
+  <circle cx="170" cy="320" r="6" fill="#10B981" opacity="0.8"/>
+  <circle cx="240" cy="350" r="6" fill="#10B981" opacity="0.8"/>
+  <circle cx="220" cy="310" r="5" fill="#10B981" opacity="0.8"/>
+  <circle cx="160" cy="300" r="6" fill="#10B981" opacity="0.8"/>
+
+  <!-- Medium Demand Group (Amber) -->
+  <circle cx="340" cy="270" r="6" fill="#F59E0B" opacity="0.8"/>
+  <circle cx="380" cy="230" r="6" fill="#F59E0B" opacity="0.8"/>
+  <circle cx="420" cy="250" r="7" fill="#F59E0B" opacity="0.8"/>
+  <circle cx="360" cy="200" r="6" fill="#F59E0B" opacity="0.8"/>
+  <circle cx="450" cy="210" r="5" fill="#F59E0B" opacity="0.8"/>
+  <circle cx="400" cy="180" r="7" fill="#F59E0B" opacity="0.8"/>
+
+  <!-- High Demand Group (Rose) -->
+  <circle cx="580" cy="120" r="8" fill="#F43F5E" opacity="0.9"/>
+  <circle cx="630" cy="90" r="8" fill="#F43F5E" opacity="0.9"/>
+  <circle cx="670" cy="110" r="8" fill="#F43F5E" opacity="0.9"/>
+  <circle cx="610" cy="80" r="9" fill="#F43F5E" opacity="0.9"/>
+
+  <!-- Legend -->
+  <rect x="560" y="320" width="160" height="90" rx="8" fill="rgba(14, 20, 36, 0.9)" stroke="rgba(255, 255, 255, 0.1)"/>
+  <circle cx="580" cy="345" r="5" fill="#10B981"/>
+  <text x="595" y="349" fill="#94A3B8" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">Low Demand (84)</text>
+  <circle cx="580" cy="365" r="5" fill="#F59E0B"/>
+  <text x="595" y="369" fill="#94A3B8" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">Medium Demand (57)</text>
+  <circle cx="580" cy="385" r="5" fill="#F43F5E"/>
+  <text x="595" y="389" fill="#94A3B8" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">High Demand (9)</text>
+</svg>

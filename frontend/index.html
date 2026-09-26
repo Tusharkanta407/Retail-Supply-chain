@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Supply Chain AI | Intelligent Operations Dashboard</title>
+  <meta name="description" content="Executive supply chain intelligence dashboard featuring PySpark big data analytics, K-Means demand clustering, GPT scenario simulations, and STRIDE security posture.">
+  
+  <!-- Modern Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js for data visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Top Navigation Header -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">NEXUS SUPPLY CHAIN</div>
+          <div class="brand-subtitle">Enterprise Operations & Predictive Analytics</div>
+        </div>
+      </div>
+
+      <!-- Center System Status & Controls -->
+      <div class="header-controls">
+        <div class="status-indicator" id="connection-status">
+          <span class="status-dot online"></span>
+          <span class="status-text" id="status-label">API Connected</span>
+        </div>
+
+        <button id="btn-refresh" class="btn btn-secondary" title="Refresh all dataset telemetry">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 4v6h-6M1 20v-6h6"/>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+          </svg>
+          <span>Refresh</span>
+        </button>
+
+        <button id="btn-open-upload" class="btn btn-secondary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+          </svg>
+          <span>Upload CSV</span>
+        </button>
+
+        <button id="btn-trigger-pipeline" class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          <span>Run Pipeline</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="app-main">
+      <!-- Hero Executive Metrics Strip -->
+      <section class="kpi-strip">
+        <div class="kpi-card" id="kpi-revenue-card">
+          <div class="kpi-icon-wrap icon-cyan">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23"/>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+          </div>
+          <div class="kpi-content">
+            <div class="kpi-label">Total Net Revenue</div>
+            <div class="kpi-value" id="kpi-revenue">$26.88M</div>
+            <div class="kpi-subtext positive">Across all retail transactions</div>
+          </div>
+        </div>
+
+        <div class="kpi-card" id="kpi-units-card">
+          <div class="kpi-icon-wrap icon-violet">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+              <line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
+          </div>
+          <div class="kpi-content">
+            <div class="kpi-label">Units Dispatched</div>
+            <div class="kpi-value" id="kpi-units">509,720</div>
+            <div class="kpi-subtext neutral">Fact-table sales quantity</div>
+          </div>
+        </div>
+
+        <div class="kpi-card" id="kpi-network-card">
+          <div class="kpi-icon-wrap icon-emerald">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+          </div>
+          <div class="kpi-content">
+            <div class="kpi-label">Fulfillment Network</div>
+            <div class="kpi-value" id="kpi-network">10 WH / 20 Stores</div>
+            <div class="kpi-subtext positive">150 Unique Product SKUs</div>
+          </div>
+        </div>
+
+        <div class="kpi-card" id="kpi-high-demand-card">
+          <div class="kpi-icon-wrap icon-rose">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <div class="kpi-content">
+            <div class="kpi-label">High-Velocity SKUs</div>
+            <div class="kpi-value" id="kpi-high-demand">9 SKUs</div>
+            <div class="kpi-subtext alert">Critical stock-out exposure</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Navigation Tabs Bar -->
+      <nav class="tab-navigation">
+        <button class="nav-tab active" data-tab="tab-overview">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3v18h18"/>
+            <path d="M18 17V9M13 17V5M8 17v-3"/>
+          </svg>
+          <span>Executive Overview</span>
+        </button>
+
+        <button class="nav-tab" data-tab="tab-clustering">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <circle cx="19" cy="5" r="2"/>
+            <circle cx="5" cy="19" r="2"/>
+            <circle cx="19" cy="19" r="2"/>
+            <circle cx="5" cy="5" r="2"/>
+          </svg>
+          <span>ML Demand Clusters (K-Means)</span>
+        </button>
+
+        <button class="nav-tab" data-tab="tab-ai-sim">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          <span>AI Scenario Simulator</span>
+        </button>
+
+        <button class="nav-tab" data-tab="tab-warehouses">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span>Warehouse & Inventory</span>
+        </button>
+
+        <button class="nav-tab" data-tab="tab-security">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span>STRIDE Security Model</span>
+        </button>
+      </nav>
+
+      <!-- TAB 1: EXECUTIVE OVERVIEW -->
+      <div class="tab-pane active" id="tab-overview">
+        <div class="grid-2-col">
+          <!-- Sales Trend Chart Card -->
+          <div class="glass-card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">Monthly Sales & Revenue Trajectory</h2>
+                <p class="card-subtitle">Aggregated from Star Schema dim_date & fact_sales via PySpark ETL</p>
+              </div>
+              <div class="card-badges">
+                <span class="badge badge-cyan">GET /sales-summary</span>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="salesChart"></canvas>
+            </div>
+            <div class="chart-legend-custom">
+              <div class="legend-item"><span class="legend-color bg-cyan"></span> Revenue ($ USD)</div>
+              <div class="legend-item"><span class="legend-color bg-violet"></span> Units Sold</div>
+            </div>
+          </div>
+
+          <!-- Warehouse Volume Share Card -->
+          <div class="glass-card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">Warehouse Throughput Distribution</h2>
+                <p class="card-subtitle">MapReduce output verifying sales units per fulfillment hub</p>
+              </div>
+              <div class="card-badges">
+                <span class="badge badge-emerald">GET /warehouse-summary</span>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="warehouseChart"></canvas>
+            </div>
+            <div class="mini-stats-grid" id="wh-quick-stats">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Pipeline Architecture Summary Banner -->
+        <div class="glass-card pipeline-banner">
+          <div class="banner-step">
+            <div class="step-num">01</div>
+            <div class="step-info">
+              <strong>PySpark Pipeline</strong>
+              <span>Cleaned 60,150 &rarr; 59,698 rows; derived revenue & date features</span>
+            </div>
+          </div>
+          <div class="banner-arrow">&rarr;</div>
+          <div class="banner-step">
+            <div class="step-num">02</div>
+            <div class="step-info">
+              <strong>Star Schema DDL</strong>
+              <span>4 Dimension tables + 1 Fact table with indexed surrogate keys</span>
+            </div>
+          </div>
+          <div class="banner-arrow">&rarr;</div>
+          <div class="banner-step">
+            <div class="step-num">03</div>
+            <div class="step-info">
+              <strong>K-Means (k=3)</strong>
+              <span>Low (84), Medium (57), High (9) demand clustering</span>
+            </div>
+          </div>
+          <div class="banner-arrow">&rarr;</div>
+          <div class="banner-step">
+            <div class="step-num">04</div>
+            <div class="step-info">
+              <strong>GPT & STRIDE API</strong>
+              <span>Demand shock forecasting protected with API key & validation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: ML DEMAND CLUSTERING (K-MEANS) -->
+      <div class="tab-pane" id="tab-clustering">
+        <!-- Demand Tiers Strip -->
+        <div class="cluster-summary-grid">
+          <div class="cluster-card cluster-low">
+            <div class="cluster-header">
+              <span class="cluster-badge badge-green">Low Demand</span>
+              <span class="cluster-pct" id="cluster-low-pct">56% of Catalog</span>
+            </div>
+            <div class="cluster-count" id="cluster-low-count">84</div>
+            <p class="cluster-desc">Stable, baseline moving products with predictable, low-velocity daily turnover.</p>
+          </div>
+
+          <div class="cluster-card cluster-med">
+            <div class="cluster-header">
+              <span class="cluster-badge badge-amber">Medium Demand</span>
+              <span class="cluster-pct" id="cluster-med-pct">38% of Catalog</span>
+            </div>
+            <div class="cluster-count" id="cluster-med-count">57</div>
+            <p class="cluster-desc">Core retail drivers. Standard replenishment frequency and moderate stock buffer.</p>
+          </div>
+
+          <div class="cluster-card cluster-high">
+            <div class="cluster-header">
+              <span class="cluster-badge badge-rose">High Demand</span>
+              <span class="cluster-pct" id="cluster-high-pct">6% of Catalog</span>
+            </div>
+            <div class="cluster-count" id="cluster-high-count">9</div>
+            <p class="cluster-desc">High-velocity anchor SKUs. Highest revenue impact; elevated stock-out risk.</p>
+          </div>
+        </div>
+
+        <div class="grid-2-col">
+          <!-- Live Scatter Plot Viewer -->
+          <div class="glass-card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">K-Means Scatter Plot (Daily Sales vs Revenue)</h2>
+                <p class="card-subtitle">Generated by <code>clustering/demand_clustering.py</code></p>
+              </div>
+              <div class="card-badges">
+                <span class="badge badge-cyan">GET /cluster-plot</span>
+              </div>
+            </div>
+            <div class="cluster-plot-container">
+              <img id="cluster-img" src="/cluster-plot" alt="K-Means Cluster Scatter Plot" onerror="this.onerror=null; this.src='/static/fallback-plot.svg';">
+            </div>
+            <div class="plot-meta-footer">
+              <span>Features: <code>total_sales</code>, <code>avg_daily_sales</code>, <code>volatility</code>, <code>avg_stock</code>, <code>revenue</code></span>
+              <button class="btn btn-secondary btn-sm" id="btn-reload-plot">Reload Image</button>
+            </div>
+          </div>
+
+          <!-- Product Demand Table -->
+          <div class="glass-card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">Inventory Allocation by Cluster</h2>
+                <p class="card-subtitle">Top 50 SKUs mapped to demand tiers</p>
+              </div>
+              <div class="table-search-box">
+                <input type="text" id="inventory-filter" placeholder="Search Product ID...">
+              </div>
+            </div>
+            <div class="table-scroll-container">
+              <table class="data-table" id="inventory-table">
+                <thead>
+                  <tr>
+                    <th>Product ID</th>
+                    <th>Demand Tier</th>
+                    <th>Daily Sales</th>
+                    <th>Avg Stock</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="inventory-tbody">
+                  <tr><td colspan="5" class="loading-cell">Loading inventory...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: AI SCENARIO SIMULATOR -->
+      <div class="tab-pane" id="tab-ai-sim">
+        <div class="grid-2-col">
+          <!-- Control Panel -->
+          <div class="glass-card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">Simulate Supply & Demand Shocks</h2>
+                <p class="card-subtitle">Conditioned on live Star Schema baselines with GPT-4 & rule fallback</p>
+              </div>
+              <span class="badge badge-violet">POST /demand-simulation</span>
+            </div>
+
+            <div class="scenario-selector-grid">
+              <button class="scenario-btn active" data-scenario="Normal">
+                <div class="scenario-icon">🌱</div>
+                <div class="scenario-title">Normal</div>
+                <div class="scenario-desc">Organic growth (+5% expected volume)</div>
+              </button>
+
+              <button class="scenario-btn" data-scenario="Festival">
+                <div class="scenario-icon">🎉</div>
+                <div class="scenario-title">Festival</div>
+                <div class="scenario-desc">Peak shopping surge (+40% demand spike)</div>
+              </button>
+
+              <button class="scenario-btn" data-scenario="Low demand">
+                <div class="scenario-icon">📉</div>
+                <div class="scenario-title">Low demand</div>
+                <div class="scenario-desc">Economic downturn (-20% market contraction)</div>
+              </button>
+
+              <button class="scenario-btn" data-scenario="Supply disruption">
+                <div class="scenario-icon">🚢</div>
+                <div class="scenario-title">Supply disruption</div>
+                <div class="scenario-desc">Logistics choke & delay (-15% availability)</div>
+              </button>
+            </div>
+
+            <div class="sim-action-bar">
+              <button class="btn btn-primary btn-block" id="btn-run-sim">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+                <span>Run Simulation for <strong id="selected-scenario-name">Normal</strong></span>
+              </button>
+            </div>
+
+            <div class="grounding-info-box">
+              <div class="info-row">
+                <span class="label">Historical Sales Baseline:</span>
+                <span class="value" id="sim-base-units">509,720 units</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Current Warehouse Stock:</span>
+                <span class="value" id="sim-base-stock">15,476,369 units</span>
+              </div>
+              <div class="info-row">
+                <span class="label">High Demand SKUs Grounded:</span>
+                <span class="value" id="sim-base-high">9 Products</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Telemetry Source:</span>
+                <span class="value code-val">SQLite Star Schema (fact_sales)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Output Intelligence Card -->
+          <div class="glass-card ai-output-card" id="ai-output-panel">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">Predictive Intelligence Response</h2>
+                <p class="card-subtitle">Synthesized recommendations & inventory risk rating</p>
+              </div>
+              <span class="badge" id="ai-source-badge">Source: Ready</span>
+            </div>
+
+            <div class="ai-forecast-display">
+              <div class="forecast-metric">
+                <span class="forecast-label">Projected Demand</span>
+                <div class="forecast-number-row">
+                  <span class="forecast-val" id="sim-res-expected">—</span>
+                  <span class="delta-badge" id="sim-res-delta">—</span>
+                </div>
+              </div>
+
+              <div class="forecast-metric">
+                <span class="forecast-label">Supply Chain Risk</span>
+                <div class="risk-pill-box">
+                  <span class="risk-pill" id="sim-res-risk">PENDING</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="ai-recommendation-box">
+              <div class="rec-header">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                </svg>
+                <span>Strategic Action Plan</span>
+              </div>
+              <p class="rec-text" id="sim-res-recommendation">Click "Run Simulation" to generate operational forecasts for the selected demand scenario.</p>
+              <div class="rec-explanation" id="sim-res-explanation"></div>
+            </div>
+
+            <div class="ai-card-footer">
+              <span id="ai-timestamp">System ready</span>
+              <span class="badge badge-cyan">Zero-Downtime Fallback Protected</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: WAREHOUSE & INVENTORY -->
+      <div class="tab-pane" id="tab-warehouses">
+        <div class="glass-card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Warehouse Distribution & Fulfillment Performance</h2>
+              <p class="card-subtitle">MapReduce aggregated unit sales, stock availability, and revenue</p>
+            </div>
+            <span class="badge badge-emerald">GET /warehouse-summary</span>
+          </div>
+
+          <div class="table-scroll-container">
+            <table class="data-table" id="warehouse-table">
+              <thead>
+                <tr>
+                  <th>Warehouse ID</th>
+                  <th>Units Sold</th>
+                  <th>Avg Stock Level</th>
+                  <th>Revenue</th>
+                  <th>Stock-to-Sales Velocity</th>
+                  <th>Operational Risk</th>
+                </tr>
+              </thead>
+              <tbody id="warehouse-tbody">
+                <tr><td colspan="6" class="loading-cell">Loading warehouse data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: STRIDE SECURITY -->
+      <div class="tab-pane" id="tab-security">
+        <div class="glass-card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">STRIDE Threat Modeling & API Protection Matrix</h2>
+              <p class="card-subtitle">Comprehensive threat surface analysis for all 8 microservice endpoints</p>
+            </div>
+            <div class="card-badges">
+              <span class="badge badge-rose">STRIDE.md</span>
+              <span class="badge badge-emerald">Prototype Protected</span>
+            </div>
+          </div>
+
+          <!-- Active Security Controls Summary -->
+          <div class="security-controls-row">
+            <div class="control-box">
+              <div class="control-status status-active"></div>
+              <div>
+                <strong>API Key Authentication</strong>
+                <p>Enforced via <code>x-api-key</code> on all write & AI endpoints (<code>/upload</code>, <code>/process</code>, <code>/demand-simulation</code>).</p>
+              </div>
+            </div>
+
+            <div class="control-box">
+              <div class="control-status status-active"></div>
+              <div>
+                <strong>Strict CSV Size & Type Cap</strong>
+                <p>Uploads restricted strictly to <code>.csv</code> format with a 20 MB size ceiling to prevent disk exhaustion.</p>
+              </div>
+            </div>
+
+            <div class="control-box">
+              <div class="control-status status-active"></div>
+              <div>
+                <strong>Prompt Injection Defense</strong>
+                <p>Whitelist validation prevents arbitrary prompt payloads in AI simulations.</p>
+              </div>
+            </div>
+
+            <div class="control-box">
+              <div class="control-status status-active"></div>
+              <div>
+                <strong>Resilient Rule Fallback</strong>
+                <p>Automatic degradation to deterministic rule engine if OpenAI API key is missing or offline.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- STRIDE Interactive Matrix Table -->
+          <div class="table-scroll-container" style="margin-top: 24px;">
+            <table class="data-table stride-table" id="stride-table">
+              <thead>
+                <tr>
+                  <th style="width: 140px;">Endpoint</th>
+                  <th>(S) Spoofing</th>
+                  <th>(T) Tampering</th>
+                  <th>(R) Repudiation</th>
+                  <th>(I) Info Disclosure</th>
+                  <th>(D) Denial of Service</th>
+                  <th>(E) Elevation of Privilege</th>
+                </tr>
+              </thead>
+              <tbody id="stride-tbody">
+                <!-- Dynamically populated or static fallback -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Upload CSV Modal -->
+    <div class="modal-backdrop" id="upload-modal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3 class="modal-title">Upload Sales Dataset</h3>
+          <button class="modal-close-btn" id="btn-close-upload">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-desc">Select a raw retail CSV dataset to upload to the server. Enforces 20 MB ceiling and <code>.csv</code> extension.</p>
+          
+          <div class="drop-zone" id="drop-zone">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+            </svg>
+            <div class="drop-text">Drag & drop your CSV file here, or click to browse</div>
+            <input type="file" id="file-input" accept=".csv" style="display: none;">
+          </div>
+          <div id="file-info" class="file-info-text"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="btn-cancel-upload">Cancel</button>
+          <button class="btn btn-primary" id="btn-submit-upload" disabled>Upload to Server</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pipeline Execution Modal -->
+    <div class="modal-backdrop" id="pipeline-modal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3 class="modal-title">PySpark & ETL Pipeline Execution</h3>
+          <button class="modal-close-btn" id="btn-close-pipeline">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-desc">This triggers the end-to-end data pipeline via <code>POST /process</code>:</p>
+          <div class="pipeline-log-terminal" id="pipeline-terminal">
+            <div class="term-line">&gt; Ready to execute pipeline.</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="btn-cancel-pipeline">Close</button>
+          <button class="btn btn-primary" id="btn-confirm-pipeline">Start Full Run</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
